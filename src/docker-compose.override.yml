@@ -1,0 +1,28 @@
+version: '3.4'
+
+services:
+  catalogdb:
+    image: mongo
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - "27017:27017"
+
+  catalog.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "DatabaseSettings:ConnectionString=mongodb://catalogdb:27017"
+    ports:
+      - "8000:80"
+    depends_on:
+      - catalogdb
+
+  mongoclient:
+    image: mongoclient/mongoclient
+    ports:
+      - "3000:3000"
+    depends_on:
+      - catalogdb
+
+volumes:
+  mongo_data:

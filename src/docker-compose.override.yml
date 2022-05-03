@@ -12,6 +12,17 @@ services:
     restart: always
     ports:
       - "6379:6379"
+
+  discountdb:
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin1234
+      - POSTGRES_DB=DiscountDB
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
   
   portainer:
     restart: always
@@ -46,6 +57,3 @@ services:
       - basketdb
     ports:
       - "8001:80"
-
-volumes:
-  mongo_data:

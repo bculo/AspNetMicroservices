@@ -8,6 +8,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Ordering.API.Filters;
 using Ordering.API.Services;
+using Ordering.Application;
+using Ordering.Infrastracture;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,10 +29,11 @@ namespace Ordering.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddApplicationServices();
+            services.AddInfrastructureServices(Configuration);
+
             services.AddHttpContextAccessor();
-
             services.AddScoped<IRequestContextService, RequestContextService>();
-
             services.AddControllers(opt => opt.Filters.Add<GlobalExceptionFilter>());
 
             services.AddControllers();

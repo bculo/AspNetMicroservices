@@ -23,6 +23,15 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
+  ordersqlserver:
+    environment:
+      - SA_PASSWORD=pa55w0rd!
+      - ACCEPT_EULA=Y
+    ports:
+      - "1433:1433"
+    volumes:
+      - ordersqlvolume:/var/opt/mssql
   
   portainer:
     restart: always
@@ -85,4 +94,13 @@ services:
       - discountdb
     ports:
       - "8003:80"
+
+  ordering.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "ConnectionStrings:OrderingConnectionString=Data Source=ordersqlserver,1433;Database=OrderDB;User ID=sa;Password=pa55w0rd!"
+    depends_on:
+      - ordersqlserver
+    ports:
+      - "8004:80"
 

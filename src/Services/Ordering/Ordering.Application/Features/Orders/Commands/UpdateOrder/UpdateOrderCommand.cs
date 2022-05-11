@@ -1,21 +1,22 @@
-﻿using Ordering.Domain.Common;
+﻿using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ordering.Domain.Entitites
+namespace Ordering.Application.Features.Orders.Commands.UpdateOrder
 {
-    public class Order : EntityBase
+    public class UpdateOrderCommand : IRequest
     {
+        public int Id { get; set; }
         public string UserName { get; set; }
         public decimal TotalPrice { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string EmailAddress { get; set; }
-        public string AddressLine { get; set; }
-        public string Country { get; set; } 
+        public string EmailAdress { get; set; }
+        public string AdressLine { get; set; }
+        public string Country { get; set; }
         public string State { get; set; }
         public string ZipCode { get; set; }
         public string CardName { get; set; }

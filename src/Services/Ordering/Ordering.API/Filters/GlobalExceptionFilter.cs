@@ -42,6 +42,8 @@ namespace Ordering.API.Filters
 
         private void HandleException(ExceptionContext context)
         {
+            _logger.LogError(context.Exception, context.Exception.Message);
+
             bool returnBadRequest = IsAjaxRequest(context.HttpContext.Request);
 
             var errorModel = GetErrorModel(context.Exception);

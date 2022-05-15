@@ -1,17 +1,6 @@
 version: '3.4'
 
 services:
-  catalogdb:
-    restart: always
-    volumes:
-      - mongo_data:/data/db
-    ports:
-      - "27017:27017"
-
-  basketdb:
-    restart: always
-    ports:
-      - "6379:6379"
 
   discountdb:
     environment:
@@ -23,50 +12,6 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-
-  ordersqlserver:
-    environment:
-      - SA_PASSWORD=pa55w0rd!
-      - ACCEPT_EULA=Y
-    ports:
-      - "1433:1433"
-    volumes:
-      - ordersqlvolume:/var/opt/mssql
-  
-  portainer:
-    restart: always
-    ports:
-      - "8090:8000"
-      - "9443:9443"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - portainer_data:/data
-
-  catalog.api:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - "DatabaseSettings:ConnectionString=mongodb://catalogdb:27017"
-    ports:
-      - "8000:80"
-    depends_on:
-      - catalogdb
-
-  mongoclient:
-    image: mongoclient/mongoclient
-    ports:
-      - "3000:3000"
-    depends_on:
-      - catalogdb
-
-  basket.api:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - CacheSettings:ConnectionString=basketdb:6379
-      - "GrpcSettings:DiscountUrl=http://discount.grpc"
-    depends_on:
-      - basketdb
-    ports:
-      - "8001:80"
 
   pgadmin:
     environment:
@@ -95,12 +40,8 @@ services:
     ports:
       - "8003:80"
 
-  ordering.api:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - "ConnectionStrings:OrderingConnectionString=Data Source=ordersqlserver,1433;Database=OrderDB;User ID=sa;Password=pa55w0rd!"
-    depends_on:
-      - ordersqlserver
+  rabbitmq:
+    container_name: rabbitmq
     ports:
-      - "8004:80"
-
+      - "5672:5672"
+      - "15672:15672" 

@@ -32,6 +32,9 @@ namespace Discount.API.Extensions
                         Connection = connection
                     };
 
+                    command.CommandText = "SELECT 'CREATE DATABASE DiscountDB' WHERE NOT EXISTS(SELECT FROM pg_database WHERE datname = 'DiscountDB')";
+                    command.ExecuteNonQuery();
+
                     command.CommandText = "DROP TABLE IF EXISTS Coupon";
                     command.ExecuteNonQuery();
 

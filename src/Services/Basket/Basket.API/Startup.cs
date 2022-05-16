@@ -34,14 +34,13 @@ namespace Basket.API
                 options.Configuration = Configuration.GetValue<string>("CacheSettings:ConnectionString");
             });
 
-            services.AddScoped<IBasketRepository, BaskRepository>();
+            //services.AddScoped<IBasketRepository, BasketRepository>();
+            services.AddScoped<IBasketRepository, FakeBasketRepository>();
             services.AddScoped<IDiscountService, DiscountGrpcService>();
             services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>(opt =>
             {
                 opt.Address = new Uri(Configuration["GrpcSettings:DiscountUrl"]);
             });
-
-
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

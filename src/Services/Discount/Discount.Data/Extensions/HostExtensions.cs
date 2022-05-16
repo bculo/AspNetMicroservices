@@ -1,22 +1,21 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace Discount.Grpc.Extensions
+namespace Discount.Data.Extensions
 {
     public static class HostExtensions
     {
         public static IHost MigrateDatabase<TContext>(this IHost host, int? retry = 0)
         {
-            int retryForAvailability = retry.Value;
 
-            using(var scope = host.Services.CreateScope())
+            using (var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
                 var configuration = services.GetRequiredService<IConfiguration>();
@@ -32,7 +31,7 @@ namespace Discount.Grpc.Extensions
                         Connection = connection
                     };
 
-                    command.CommandText = "SELECT 'CREATE DATABASE DiscountDB WHERE NOT EXISTS(SELECT FROM pg_database WHERE datname = 'DiscountDB')";
+                    command.CommandText = "SELECT 'CREATE DATABASE DiscountDB' WHERE NOT EXISTS(SELECT FROM pg_database WHERE datname = 'DiscountDB')";
                     command.ExecuteNonQuery();
 
                     command.CommandText = "DROP TABLE IF EXISTS Coupon";
@@ -55,7 +54,7 @@ namespace Discount.Grpc.Extensions
 
                     connection.Close();
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     throw;
                 }

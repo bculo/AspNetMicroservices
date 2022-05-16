@@ -1,10 +1,11 @@
-﻿using Discount.Grpc.Entities;
+﻿using Discount.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace Discount.Grpc.Repositories
+namespace Discount.Data.Contracts
 {
     public interface IDiscountRepository
     {

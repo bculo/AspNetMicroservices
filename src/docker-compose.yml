@@ -2,11 +2,17 @@ version: '3.4'
 
 services:
 
-  discountdb:
-    image: postgres
+  catalog.api:
+    image: ${DOCKER_REGISTRY-}catalogapi
+    build:
+      context: .
+      dockerfile: Services/Catalog/Catalog.API/Dockerfile
 
-  pgadmin:
-    image: dpage/pgadmin4
+  basket.api:
+    image: ${DOCKER_REGISTRY-}basketapi
+    build:
+      context: .
+      dockerfile: Services/Basket/Basket.API/Dockerfile
 
   discount.api:
     image: ${DOCKER_REGISTRY-}discountapi
@@ -19,6 +25,15 @@ services:
     build:
       context: .
       dockerfile: Services/Discount/Discount.Grpc/Dockerfile
+
+  ordering.api:
+    image: ${DOCKER_REGISTRY-}orderingapi
+    build:
+      context: .
+      dockerfile: Services/Ordering/Ordering.API/Dockerfile
+
+  ordersqlserver:
+    image: mcr.microsoft.com/mssql/server
 
   rabbitmq:
     image: rabbitmq:3-management-alpine

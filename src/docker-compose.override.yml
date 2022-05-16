@@ -2,31 +2,34 @@ version: '3.4'
 
 services:
 
-  discountdb:
+  ordersqlserver:
     environment:
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=admin1234
-      - POSTGRES_DB=DiscountDB
-    restart: always
+      - SA_PASSWORD=pa55w0rd!
+      - ACCEPT_EULA=Y
     ports:
-      - "5432:5432"
+      - "1433:1433"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - ordersqlvolume:/var/opt/mssql
 
-  pgadmin:
+  catalog.api:
     environment:
-      - PGADMIN_DEFAULT_EMAIL=admin@aspnetrun.com
-      - PGADMIN_DEFAULT_PASSWORD=admin1234
-    restart: always
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "DatabaseSettings:ConnectionString=mongodb://catalogdb:27017"
     ports:
-      - "5050:80"
+      - "8000:80"
+
+  basket.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - CacheSettings:ConnectionString=basketdb:6379
+      - "GrpcSettings:DiscountUrl=http://discount.grpc"
+    ports:
+      - "8001:80"
 
   discount.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - "DatabaseSettings:ConnectionString=Server=discountdb;Port=5432;Database=DiscountDB;Userid=admin;Password=admin1234;"
-    depends_on:
-      - discountdb
     ports:
       - "8002:80"
 
@@ -35,8 +38,6 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - "DatabaseSettings:ConnectionString=Server=discountdb;Port=5432;Database=DiscountDB;Userid=admin;Password=admin1234;"
-    depends_on:
-      - discountdb
     ports:
       - "8003:80"
 

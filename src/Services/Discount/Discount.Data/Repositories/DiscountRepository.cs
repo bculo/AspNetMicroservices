@@ -1,20 +1,18 @@
 ﻿using Dapper;
-using Discount.Grpc.Entities;
+using Discount.Data.Contracts;
+using Discount.Data.Entities;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.Threading.Tasks;
 
-namespace Discount.Grpc.Repositories
+namespace Discount.Data.Repositories
 {
     public class DiscountRepository : IDiscountRepository
     {
         private readonly IConfiguration _config;
 
-        private IDbConnection Connection 
+        private IDbConnection Connection
         {
             get
             {
@@ -71,7 +69,7 @@ namespace Discount.Grpc.Repositories
         {
             using var queryConnection = Connection;
 
-            return await queryConnection.QueryFirstOrDefaultAsync<Coupon>("SELECT * FROM COUPON WHERE ProductName = @ProductName", new { ProductName = productName});
+            return await queryConnection.QueryFirstOrDefaultAsync<Coupon>("SELECT * FROM COUPON WHERE ProductName = @ProductName", new { ProductName = productName });
         }
 
         public async Task<bool> UpdateDiscount(Coupon coupon)

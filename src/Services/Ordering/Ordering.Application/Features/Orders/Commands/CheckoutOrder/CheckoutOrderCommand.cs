@@ -13,7 +13,7 @@ namespace Ordering.Application.Features.Orders.Commands.CheckoutOrder
         public decimal TotalPrice { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string EmailAdress { get; set; }
+        public string EmailAddress { get; set; }
         public string AdressLine { get; set; }
         public string Country { get; set; }
         public string State { get; set; }

@@ -1,6 +1,7 @@
 using Basket.API.Repositories;
 using Basket.API.Services;
 using Discount.Grpc.Protos;
+using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -41,6 +42,17 @@ namespace Basket.API
             {
                 opt.Address = new Uri(Configuration["GrpcSettings:DiscountUrl"]);
             });
+
+            services.AddMassTransit(opt =>
+            {
+                opt.UsingRabbitMq((cont, conf) =>
+                {
+                    conf.Host(Configuration["EventBusSettings:HostAddress"]);
+                    conf.ConfigureEndpoints(cont);
+                });
+            });
+
+            services.AddAutoMapper(typeof(Startup));
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

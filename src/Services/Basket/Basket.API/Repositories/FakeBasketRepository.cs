@@ -29,9 +29,14 @@ namespace Basket.API.Repositories
 
         public async Task<ShoppingCart> UpdateBasket(ShoppingCart basket)
         {
-            var basketJson = JsonConvert.SerializeObject(basket);
+            var basketDb = await GetBasket(basket.UserName);
 
-            Repository.Add(basket.UserName, basketJson);
+            if(basketDb is not null) //update action
+            {
+                Repository.Remove(basket.UserName);
+            }
+
+            Repository.Add(basket.UserName, JsonConvert.SerializeObject(basket));
 
             return await GetBasket(basket.UserName);
         }
